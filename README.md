@@ -2,7 +2,7 @@
 A clone of Minecraft made in Panda3D. Very early WIP.
 
 
-*CONTROLS:*
+**CONTROLS:**
 
 Use the mouse to move the camera (this is temporary)
 
