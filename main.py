@@ -1,5 +1,4 @@
 from panda3d.core import *
-from pandac.PandaModules import *
 from direct.directbase import DirectStart
 from direct.actor.Actor import Actor
 from direct.task import Task
@@ -15,7 +14,6 @@ octaves = 1
 base.enableParticles()
 
 world = {}
-bWorld = {}
 
 AIR = 0
 DIRT = 1
@@ -74,18 +72,6 @@ for x in xrange(0, 16):
         addBlock(blockType,x,y,z)
         if verboseGeneration: print "Generated block %d at (%d, %d, %d)" % (blockType, x, y, z)
 
-bWorld = world
-
-myTraverser = CollisionTraverser()
-myHandler = CollisionHandlerQueue()
-        
-pickerNode = CollisionNode('mouseRay')
-pickerNP = camera.attachNewNode(pickerNode)
-pickerNode.setFromCollideMask(GeomNode.getDefaultCollideMask())
-pickerRay = CollisionRay()
-pickerNode.addSolid(pickerRay)
-myTraverser.addCollider(pickerNP, myHandler)
-
 alight = AmbientLight('alight')
 alight.setColor(VBase4(0.6, 0.6, 0.6, 1))
 alnp = render.attachNewNode(alight)
@@ -96,31 +82,34 @@ dlnp = render.attachNewNode(dlight)
 dlnp.setHpr(0, -45, 0)
 render.setLight(dlnp)
 
-# Use a 512x512 resolution shadow map
-dlight.setShadowCaster(True, 512, 512)
-render.setShaderAuto()
+traverser = CollisionTraverser()
+handler = CollisionHandlerQueue()
+        
+pickerNode = CollisionNode('mouseRay')
+pickerNP = camera.attachNewNode(pickerNode)
+pickerNode.setFromCollideMask(GeomNode.getDefaultCollideMask())
+pickerRay = CollisionRay()
+pickerNode.addSolid(pickerRay)
+traverser.addCollider(pickerNP, handler)
 
 def handlePick(right=False):
     if paused:
         return # no
-    # First we check that the mouse is not outside the screen.
     if base.mouseWatcherNode.hasMouse():
         mpos = base.mouseWatcherNode.getMouse()
         pickerRay.setFromLens(base.camNode, mpos.getX(), mpos.getY())
 
-        myTraverser.traverse(render)
-        # Assume for simplicity's sake that myHandler is a CollisionHandlerQueue.
-        if myHandler.getNumEntries() > 0:
-            # This is so we get the closest object.
-            myHandler.sortEntries()
-            pickedObj = myHandler.getEntry(0).getIntoNodePath()
+        traverser.traverse(render)
+        if handler.getNumEntries() > 0:
+            handler.sortEntries()
+            pickedObj = handler.getEntry(0).getIntoNodePath()
             pickedObj = pickedObj.findNetTag('blockTag')
             if not pickedObj.isEmpty():
                 if right:
-                    handleRightPickedObject(pickedObj, myHandler.getEntry(0).getIntoNodePath().findNetTag('westTag').isEmpty(),
-                        myHandler.getEntry(0).getIntoNodePath().findNetTag('northTag').isEmpty(), myHandler.getEntry(0).getIntoNodePath().findNetTag('eastTag').isEmpty(),
-                        myHandler.getEntry(0).getIntoNodePath().findNetTag('southTag').isEmpty(), myHandler.getEntry(0).getIntoNodePath().findNetTag('topTag').isEmpty(),
-                        myHandler.getEntry(0).getIntoNodePath().findNetTag('botTag').isEmpty())
+                    handleRightPickedObject(pickedObj, handler.getEntry(0).getIntoNodePath().findNetTag('westTag').isEmpty(),
+                        handler.getEntry(0).getIntoNodePath().findNetTag('northTag').isEmpty(), handler.getEntry(0).getIntoNodePath().findNetTag('eastTag').isEmpty(),
+                        handler.getEntry(0).getIntoNodePath().findNetTag('southTag').isEmpty(), handler.getEntry(0).getIntoNodePath().findNetTag('topTag').isEmpty(),
+                        handler.getEntry(0).getIntoNodePath().findNetTag('botTag').isEmpty())
                 else:
                     handlePickedObject(pickedObj)
 
