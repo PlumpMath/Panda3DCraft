@@ -5,6 +5,10 @@ from noise import snoise2
 import os
 import random
 
+if __debug__:
+    loadPrcFile('config/general.prc')
+    loadPrcFile('config/dev.prc')
+
 base = ShowBase()
 
 points = 256
