@@ -74,34 +74,79 @@ class PauseScreen():
         self.dim.setTransparency(1)
         self.dim.setColor(0, 0, 0, 0.5)
 
-        buttonModel = loader.loadModel('gfx/button')
+        self.buttonModel = loader.loadModel('gfx/button')
         inputTexture = loader.loadTexture('gfx/tex/button_press.png')
 
         # Pause Screen
-        self.unpauseButton = DirectButton(geom = (buttonModel.find('**/button_up'), buttonModel.find('**/button_press'), buttonModel.find('**/button_over'), buttonModel.find('**/button_disabled')),
+        self.unpauseButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
             relief = None, parent = self.pauseScr, scale = 0.75, pos = (0, 0, 0.75), text = "Resume Game", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = pause)
-        self.saveButton = DirectButton(geom = (buttonModel.find('**/button_up'), buttonModel.find('**/button_press'), buttonModel.find('**/button_over'), buttonModel.find('**/button_disabled')),
+        self.saveButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
             relief = None, parent = self.pauseScr, scale = 0.75, pos = (0, 0, 0.5), text = "Save Game", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.showSave)
-        self.loadButton = DirectButton(geom = (buttonModel.find('**/button_up'), buttonModel.find('**/button_press'), buttonModel.find('**/button_over'), buttonModel.find('**/button_disabled')),
-            relief = None, parent = self.pauseScr, scale = 0.75, pos = (0, 0, -0.5), text = "Load Game", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = pause, state = DGG.DISABLED)
-        self.exitButton = DirectButton(geom = (buttonModel.find('**/button_up'), buttonModel.find('**/button_press'), buttonModel.find('**/button_over'), buttonModel.find('**/button_disabled')),
+        self.loadButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
+            relief = None, parent = self.pauseScr, scale = 0.75, pos = (0, 0, -0.5), text = "Load Game", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.showLoad)
+        self.exitButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
             relief = None, parent = self.pauseScr, scale = 0.75, pos = (0, 0, -0.75), text = "Quit Game", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = exit)
 
         #Save Screen
-        self.saveText = DirectLabel(text = "Type in a name for your world:", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.saveScr, scale = 0.1, pos = (0,0,0.1))
+        self.saveText = DirectLabel(text = "Type in a name for your world", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.saveScr, scale = 0.1, pos = (0,0,0.1))
         self.saveText2 = DirectLabel(text = "", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.saveScr, scale = 0.06, pos = (0,0,-0.3))
         self.saveName = DirectEntry(text = "", scale= .15, command=self.save, initialText="My World", numLines = 1, focus=1, frameTexture = inputTexture, parent = self.saveScr, text_fg = (1,1,1,1),
-            pos = (-0.75, 0, -0.1))
-        self.saveGameBtn = DirectButton(geom = (buttonModel.find('**/button_up'), buttonModel.find('**/button_press'), buttonModel.find('**/button_over'), buttonModel.find('**/button_disabled')),
+            pos = (-0.6, 0, -0.1), text_scale = 0.75)
+        self.saveGameBtn = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
             relief = None, parent = self.saveScr, scale = 0.75, pos = (0, 0, -0.5), text = "Save", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.save)
-        self.backButton = DirectButton(geom = (buttonModel.find('**/button_up'), buttonModel.find('**/button_press'), buttonModel.find('**/button_over'), buttonModel.find('**/button_disabled')),
+        self.backButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
             relief = None, parent = self.saveScr, scale = 0.75, pos = (0, 0, -0.75), text = "Back", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.showPause)
-        
+
+        #Load Screen
+        numItemsVisible = 3
+        itemHeight = 0.15
+
+        self.loadList = DirectScrolledList(
+            decButton_pos= (0.35, 0, 0.5),
+            decButton_text = "^",
+            decButton_text_scale = 0.04,
+            decButton_text_pos = (0, -0.025),
+            decButton_text_fg = (1, 1, 1, 1),
+            decButton_borderWidth = (0.005, 0.005),
+            decButton_scale = (1.5, 1, 2),
+            decButton_geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
+            decButton_geom_scale = 0.1,
+            decButton_relief = None,
+
+            incButton_pos= (0.35, 0, 0),
+            incButton_text = "^",
+            incButton_text_scale = 0.04,
+            incButton_text_pos = (0, -0.025),
+            incButton_text_fg = (1, 1, 1, 1),
+            incButton_borderWidth = (0.005, 0.005),
+            incButton_hpr = (0,180,0),
+            incButton_scale = (1.5, 1, 2),
+            incButton_geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
+            incButton_geom_scale = 0.1,
+            incButton_relief = None,
+         
+            frameSize = (-0.4, 1.1, -0.1, 0.59),
+            frameTexture = inputTexture,
+            frameColor = (1, 1, 1, 0.75),
+            pos = (-0.45, 0, -0.25),
+            scale = 1.25,
+            numItemsVisible = numItemsVisible,
+            forceHeight = itemHeight,
+            itemFrame_frameSize = (-0.2, 0.2, -0.37, 0.11),
+            itemFrame_pos = (0.35, 0, 0.4),
+            itemFrame_frameColor = (0,0,0,0),
+            parent = self.loadScr
+        )
+        self.backButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
+            relief = None, parent = self.loadScr, scale = 0.75, pos = (0, 0, -0.75), text = "Back", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.showPause)
+        self.loadText = DirectLabel(text = "Select your world", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.loadScr, scale = 0.1, pos = (0,0,0.55))
+        self.loadText2 = DirectLabel(text = "", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.loadScr, scale = 0.1, pos = (0,0,-0.5))
 
         self.hide()
 
     def showPause(self):
         self.saveScr.stash()
+        self.loadScr.stash()
         self.pauseScr.unstash()
         self.dim.unstash()
 
@@ -109,10 +154,28 @@ class PauseScreen():
         self.pauseScr.stash()
         self.saveScr.unstash()
 
+    def showLoad(self):
+        self.pauseScr.stash()
+        self.loadScr.unstash()
+        
+        self.loadList.removeAndDestroyAllItems()
+
+        f = []
+        if not os.path.exists('saves/'):
+            os.makedirs('saves/')
+        for (dirpath, dirnames, filenames) in os.walk('saves/'):
+            f.extend(filenames)
+            break
+
+        for file in f:
+            l = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
+                relief = None, scale = 0.5, pos = (0, 0, -0.75), text = file, text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.load, extraArgs = [file])
+            self.loadList.addItem(l) 
+
     def save(self, worldName = None):
+        self.saveText2['text'] = "Saving..."
         if worldName == None:
             worldName = self.saveName.get(True)
-        self.saveText2['text'] = "Saving..."
         print "Saving %s..." % worldName
         dest = 'saves/%s.sav' % worldName
         dir = os.path.dirname(dest)
@@ -130,6 +193,21 @@ class PauseScreen():
         f.close()
         self.saveText2['text'] = "Saved!"
         print "Saved!"
+
+    def load(self, worldName):
+        self.loadText2['text'] = "Loading..."
+        print "Loading..."
+        f = open('saves/%s' % worldName, 'r')
+        toLoad = f.read().split('\n')
+        toLoad.pop() # get rid of newline
+        for key in toLoad:
+            key = key.split(':')
+            posTup = eval(key[0])
+            addBlock(int(key[1]), posTup[0], posTup[1], posTup[2])
+        f.close()
+        self.loadText2['text'] = "Loaded!"
+        print "Loaded!"
+
 
     def hide(self):
         self.pauseScr.stash()
