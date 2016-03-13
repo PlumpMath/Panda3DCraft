@@ -4,17 +4,10 @@ A clone of Minecraft made in Panda3D. Very early WIP.
 
 **CONTROLS:**
 
-Use the mouse to move the camera (this is temporary)
-
-Left click to delete blocks
-
-Right click to place blocks
-
-S to save (temporary)
-
-L to load (temporary)
-
-ESC to pause (not fully implemented)
+* Use the mouse to move the camera (this is temporary)
+* Left click to delete blocks
+* Right click to place blocks
+* ESC to pause
 
 
 Requires the 'noise' package to be installed to PANDA3D'S PYTHON. If you have pip installed under a different Python version, follow this guide:
