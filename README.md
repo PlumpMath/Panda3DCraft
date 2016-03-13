@@ -8,3 +8,6 @@ A clone of Minecraft made in Panda3D. Very early WIP.
 * Left click to delete blocks
 * Right click to place blocks
 * ESC to pause
+
+## WARNING
+The bundled version of noise is compiled for 32-bit Python. If you're using the 64-bit Panda3D, you'll have to build it yourself.
