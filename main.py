@@ -153,10 +153,12 @@ class PauseScreen():
     def showSave(self):
         self.pauseScr.stash()
         self.saveScr.unstash()
+        self.saveText2['text'] = ""
 
     def showLoad(self):
         self.pauseScr.stash()
         self.loadScr.unstash()
+        self.loadText2['text'] = ""
         
         self.loadList.removeAndDestroyAllItems()
 
@@ -169,7 +171,7 @@ class PauseScreen():
 
         for file in f:
             l = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
-                relief = None, scale = 0.5, pos = (0, 0, -0.75), text = file, text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.load, extraArgs = [file])
+                relief = None, scale = 0.5, pos = (0, 0, -0.75), text = file.strip('.sav'), text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.load, extraArgs = [file])
             self.loadList.addItem(l) 
 
     def save(self, worldName = None):
