@@ -207,22 +207,25 @@ base.accept('mouse3', handlePick, extraArgs=[True])
 base.accept('escape', pause)
 
 def handlePickedObject(obj):
-    print "Picked a block at %d, %d, %d" % (obj.getX(), obj.getY(), obj.getZ())
+    print "Left clicked a block at %d, %d, %d" % (obj.getX(), obj.getY(), obj.getZ())
     addBlock(AIR, obj.getX(), obj.getY(), obj.getZ())
 
 def handleRightPickedObject(obj, west, north, east, south, top, bot):
-    print "Picked a block at %d, %d, %d" % (obj.getX(), obj.getY(), obj.getZ())
-    if world[(obj.getX()-1, obj.getY(), obj.getZ())].type == AIR and not west:
-        addBlock(DIRT, obj.getX()-1, obj.getY(), obj.getZ())
-    elif world[(obj.getX()+1, obj.getY(), obj.getZ())].type == AIR and not east:
-        addBlock(DIRT, obj.getX()+1, obj.getY(), obj.getZ())
-    elif world[(obj.getX(), obj.getY()-1, obj.getZ())].type == AIR and not south:
-        addBlock(DIRT, obj.getX(), obj.getY()-1, obj.getZ())
-    elif world[(obj.getX(), obj.getY()+1, obj.getZ())].type == AIR and not north:
-        addBlock(DIRT, obj.getX(), obj.getY()+1, obj.getZ())
-    elif world[(obj.getX(), obj.getY(), obj.getZ()+1)].type == AIR and not top:
-        addBlock(DIRT, obj.getX(), obj.getY(), obj.getZ()+1)
-    elif world[(obj.getX(), obj.getY(), obj.getZ()-1)].type == AIR and not bot:
-        addBlock(DIRT, obj.getX(), obj.getY(), obj.getZ()-1)
+    print "Right clicked a block at %d, %d, %d" % (obj.getX(), obj.getY(), obj.getZ())
+    try:
+        if world[(obj.getX()-1, obj.getY(), obj.getZ())].type == AIR and not west:
+            addBlock(DIRT, obj.getX()-1, obj.getY(), obj.getZ())
+        elif world[(obj.getX()+1, obj.getY(), obj.getZ())].type == AIR and not east:
+            addBlock(DIRT, obj.getX()+1, obj.getY(), obj.getZ())
+        elif world[(obj.getX(), obj.getY()-1, obj.getZ())].type == AIR and not south:
+            addBlock(DIRT, obj.getX(), obj.getY()-1, obj.getZ())
+        elif world[(obj.getX(), obj.getY()+1, obj.getZ())].type == AIR and not north:
+            addBlock(DIRT, obj.getX(), obj.getY()+1, obj.getZ())
+        elif world[(obj.getX(), obj.getY(), obj.getZ()+1)].type == AIR and not top:
+            addBlock(DIRT, obj.getX(), obj.getY(), obj.getZ()+1)
+        elif world[(obj.getX(), obj.getY(), obj.getZ()-1)].type == AIR and not bot:
+            addBlock(DIRT, obj.getX(), obj.getY(), obj.getZ()-1)
+    except KeyError:
+        print "Couldn't place block -- end of the world" # End of the world
 
 run()
