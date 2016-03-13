@@ -49,4 +49,7 @@ Temporary Items
 # =========================
 # Saves
 *.sav
+
+# Bytecode
 *.pyc
+*.pyo

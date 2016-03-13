@@ -1,13 +1,9 @@
 from panda3d.core import *
-from direct.showbase.ShowBase import ShowBase
-from direct.actor.Actor import Actor
-from direct.task import Task
 from direct.gui.DirectGui import *
-from noise import pnoise1, pnoise2, snoise2
-import sys
-import random
+from direct.showbase.ShowBase import ShowBase
+from noise import snoise2
 import os
-from direct.interval.IntervalGlobal import *
+import random
 
 base = ShowBase()
 
@@ -28,12 +24,14 @@ paused = False
 
 base.setFrameRateMeter(True)
 
-class Block():
+class Block:
+
     def __init__(self, type, x, y, z):
         self.type = type
         if self.type == AIR:
             del self
             return
+
         self.x = x
         self.y = y
         self.z = z
@@ -48,11 +46,10 @@ class Block():
         self.model.find('**/SideS').setTag('southTag', '5')
         self.model.find('**/Top').setTag('topTag', '6')
         self.model.find('**/Bottom').setTag('botTag', '7')
-    
+
     def cleanup(self):
         self.model.remove_node()
         del self
-
 
 def pause():
     global paused
@@ -65,12 +62,13 @@ def pause():
         base.enableMouse()
         pauseScreen.hide()
 
-class PauseScreen():
+class PauseScreen:
+
     def __init__(self):
         self.pauseScr = aspect2d.attachNewNode("pause") # This is used so that everything can be stashed at once... except for dim, which is on render2d
         self.loadScr = aspect2d.attachNewNode("load") # It also helps for flipping between screens
         self.saveScr = aspect2d.attachNewNode("save")
-        
+
         cm = CardMaker('card')
         self.dim = render2d.attachNewNode(cm.generate()) # On render2d because I don't know a way to cover the entire screen on aspect2d
         self.dim.setPos(-1, 0, -1)
@@ -91,7 +89,7 @@ class PauseScreen():
         self.exitButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
             relief = None, parent = self.pauseScr, scale = 0.75, pos = (0, 0, -0.75), text = "Quit Game", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = exit)
 
-        #Save Screen
+        # Save Screen
         self.saveText = DirectLabel(text = "Type in a name for your world", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.saveScr, scale = 0.1, pos = (0,0,0.1))
         self.saveText2 = DirectLabel(text = "", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.saveScr, scale = 0.06, pos = (0,0,-0.3))
         self.saveName = DirectEntry(text = "", scale= .15, command=self.save, initialText="My World", numLines = 1, focus=1, frameTexture = inputTexture, parent = self.saveScr, text_fg = (1,1,1,1),
@@ -101,7 +99,7 @@ class PauseScreen():
         self.backButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
             relief = None, parent = self.saveScr, scale = 0.75, pos = (0, 0, -0.75), text = "Back", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.showPause)
 
-        #Load Screen
+        # Load Screen
         numItemsVisible = 3
         itemHeight = 0.15
 
@@ -128,7 +126,7 @@ class PauseScreen():
             incButton_geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
             incButton_geom_scale = 0.1,
             incButton_relief = None,
-         
+
             frameSize = (-0.4, 1.1, -0.1, 0.59),
             frameTexture = inputTexture,
             frameColor = (1, 1, 1, 0.75),
@@ -163,7 +161,7 @@ class PauseScreen():
         self.pauseScr.stash()
         self.loadScr.unstash()
         self.loadText2['text'] = ""
-        
+
         self.loadList.removeAndDestroyAllItems()
 
         f = []
@@ -213,7 +211,6 @@ class PauseScreen():
         f.close()
         self.loadText2['text'] = "Loaded!"
         print "Loaded!"
-
 
     def hide(self):
         self.pauseScr.stash()
@@ -276,6 +273,7 @@ traverser.addCollider(pickerNP, handler)
 def handlePick(right=False):
     if paused:
         return # no
+
     if base.mouseWatcherNode.hasMouse():
         mpos = base.mouseWatcherNode.getMouse()
         pickerRay.setFromLens(base.camNode, mpos.getX(), mpos.getY())
