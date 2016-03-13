@@ -6,9 +6,9 @@ import os
 import random
 
 loadPrcFile('config/general.prc')
+
 if __debug__:
     loadPrcFile('config/dev.prc')
-
 
 base = ShowBase()
 
@@ -60,8 +60,8 @@ class Block:
             pass # TODO
         else:
             texture = base.loader.loadTexture("gfx/tex/%s.png" % blockNames[type].lower())
-            self.model.find('**/*').setTexture(texture)
-
+            textureStage = self.model.findTextureStage('*')
+            self.model.setTexture(textureStage, texture, 1)
 
     def cleanup(self):
         self.model.remove_node()
@@ -256,7 +256,8 @@ for x in xrange(0, 16):
         blockType = DIRT
         z = int(snoise2(x / freq, y / freq, octaves) * amplitude)
         addBlock(blockType,x,y,z)
-        if verboseGeneration: print "Generated block %d at (%d, %d, %d)" % (blockType, x, y, z)
+        if verboseGeneration:
+            print "Generated block %d at (%d, %d, %d)" % (blockType, x, y, z)
 
 alight = AmbientLight('alight')
 alight.setColor(VBase4(0.6, 0.6, 0.6, 1))
