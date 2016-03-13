@@ -5,9 +5,10 @@ from noise import snoise2
 import os
 import random
 
+loadPrcFile('config/general.prc')
 if __debug__:
-    loadPrcFile('config/general.prc')
     loadPrcFile('config/dev.prc')
+
 
 base = ShowBase()
 
