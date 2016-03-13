@@ -21,6 +21,10 @@ world = {}
 
 AIR = 0
 DIRT = 1
+COBBLESTONE = 2
+
+blockNames = ['Air', 'Dirt', 'Cobblestone']
+multiTexBlocks = []
 
 worldSize = 64/2
 
@@ -51,6 +55,13 @@ class Block:
         self.model.find('**/SideS').setTag('southTag', '5')
         self.model.find('**/Top').setTag('topTag', '6')
         self.model.find('**/Bottom').setTag('botTag', '7')
+
+        if type in multiTexBlocks:
+            pass # TODO
+        else:
+            texture = base.loader.loadTexture("gfx/tex/%s.png" % blockNames[type].lower())
+            self.model.find('**/*').setTexture(texture)
+
 
     def cleanup(self):
         self.model.remove_node()
@@ -317,7 +328,7 @@ def handleRightPickedObject(obj, west, north, east, south, top, bot):
         elif world[(obj.getX(), obj.getY()+1, obj.getZ())].type == AIR and not north:
             addBlock(DIRT, obj.getX(), obj.getY()+1, obj.getZ())
         elif world[(obj.getX(), obj.getY(), obj.getZ()+1)].type == AIR and not top:
-            addBlock(DIRT, obj.getX(), obj.getY(), obj.getZ()+1)
+            addBlock(COBBLESTONE, obj.getX(), obj.getY(), obj.getZ()+1)
         elif world[(obj.getX(), obj.getY(), obj.getZ()-1)].type == AIR and not bot:
             addBlock(DIRT, obj.getX(), obj.getY(), obj.getZ()-1)
     except KeyError:
