@@ -64,7 +64,7 @@ class Block:
             self.model.setTexture(textureStage, texture, 1)
 
     def cleanup(self):
-        self.model.remove_node()
+        self.model.removeNode()
         del self
 
 def pause():
@@ -190,7 +190,7 @@ class PauseScreen:
         for file in f:
             l = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
                 relief = None, scale = 0.5, pos = (0, 0, -0.75), text = file.strip('.sav'), text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.load, extraArgs = [file])
-            self.loadList.addItem(l) 
+            self.loadList.addItem(l)
 
     def save(self, worldName = None):
         self.saveText2['text'] = "Saving..."
@@ -237,7 +237,7 @@ class PauseScreen:
 pauseScreen = PauseScreen()
 
 def addBlock(blockType,x,y,z):
-    try: 
+    try:
         world[(x,y,z)].cleanup()
     except:
         pass
