@@ -1,5 +1,5 @@
 from panda3d.core import *
-from direct.directbase import DirectStart
+from direct.showbase.ShowBase import ShowBase
 from direct.actor.Actor import Actor
 from direct.task import Task
 from direct.gui.DirectGui import *
@@ -8,6 +8,8 @@ import sys
 import random
 import os
 from direct.interval.IntervalGlobal import *
+
+base = ShowBase()
 
 points = 256
 span = 5.0
@@ -23,6 +25,8 @@ worldSize = 64/2
 
 verboseGeneration = True
 paused = False
+
+base.setFrameRateMeter(True)
 
 class Block():
     def __init__(self, type, x, y, z):
@@ -46,7 +50,7 @@ class Block():
         self.model.find('**/Bottom').setTag('botTag', '7')
     
     def cleanup(self):
-        self.model.remove()
+        self.model.remove_node()
         del self
 
 
@@ -316,4 +320,4 @@ def handleRightPickedObject(obj, west, north, east, south, top, bot):
     except KeyError:
         print "Couldn't place block -- end of the world" # End of the world
 
-run()
+base.run()
