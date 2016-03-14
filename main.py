@@ -30,6 +30,7 @@ worldSize = 64/2
 
 verboseGeneration = True
 paused = False
+wantLimitedWorld = False
 
 base.setFrameRateMeter(True)
 
@@ -245,10 +246,12 @@ def addBlock(blockType,x,y,z):
     world[(x,y,z)] = block
     return
 
-for x in xrange(-worldSize, worldSize):
-    for y in xrange(-worldSize, worldSize):
-        for z in xrange(-worldSize, worldSize):
-            world[(x,y,z)] = Block(AIR, x, y, z)
+if wantLimitedWorld:
+    for x in xrange(-worldSize, worldSize):
+        for y in xrange(-worldSize, worldSize):
+            for z in xrange(-worldSize, worldSize):
+                world[(x,y,z)] = Block(AIR, x, y, z)
+
 
 for x in xrange(0, 16):
     for y in xrange(0, 16):
@@ -333,6 +336,20 @@ def handleRightPickedObject(obj, west, north, east, south, top, bot):
         elif world[(obj.getX(), obj.getY(), obj.getZ()-1)].type == AIR and not bot:
             addBlock(COBBLESTONE, obj.getX(), obj.getY(), obj.getZ()-1)
     except KeyError:
-        print "Couldn't place block -- end of the world" # End of the world
+        if wantLimitedWorld:
+            print "Cannot place block -- end of the world"
+        else:
+            if not west:
+                addBlock(COBBLESTONE, obj.getX()-1, obj.getY(), obj.getZ())
+            elif not east:
+                addBlock(COBBLESTONE, obj.getX()+1, obj.getY(), obj.getZ())
+            elif not south:
+                addBlock(COBBLESTONE, obj.getX(), obj.getY()-1, obj.getZ())
+            elif not north:
+                addBlock(COBBLESTONE, obj.getX(), obj.getY()+1, obj.getZ())
+            elif not top:
+                addBlock(COBBLESTONE, obj.getX(), obj.getY(), obj.getZ()+1)
+            elif not bot:
+                addBlock(COBBLESTONE, obj.getX(), obj.getY(), obj.getZ()-1)
 
 base.run()
