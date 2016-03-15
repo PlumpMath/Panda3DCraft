@@ -179,8 +179,8 @@ class PauseScreen:
         )
         self.backButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
             relief = None, parent = self.loadScr, scale = 0.5, pos = (0, 0, -0.6), text = "Back", text_fg = (1,1,1,1), text_scale = 0.1, text_pos = (0, -0.04), command = self.showPause)
-        self.loadText = DirectLabel(text = "Select your world", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.loadScr, scale = 0.1, pos = (0,0,0.55))
-        self.loadText2 = DirectLabel(text = "", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.loadScr, scale = 0.1, pos = (0,0,-0.5))
+        self.loadText = DirectLabel(text = "Select World", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.loadScr, scale = 0.075, pos = (0,0,0.55))
+        self.loadText2 = DirectLabel(text = "", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.loadScr, scale = 0.075, pos = (0,0,-0.485))
 
         self.hide()
 
