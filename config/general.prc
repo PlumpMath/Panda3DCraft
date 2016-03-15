@@ -1,5 +1,5 @@
 # Window settings
 window-title Panda3DCraft
 
-# Misc.
+# GUI
 text-default-font gfx/Minecraftia.ttf
