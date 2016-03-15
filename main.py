@@ -128,14 +128,14 @@ class PauseScreen:
             relief = None, parent = self.pauseScr, scale = 0.5, pos = (0, 0, -0.3), text = "Quit Game", text_fg = (1,1,1,1), text_scale = 0.1, text_pos = (0, -0.04), command = exit)
 
         # Save Screen
-        self.saveText = DirectLabel(text = "Type in a name for your world", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.saveScr, scale = 0.1, pos = (0,0,0.1))
-        self.saveText2 = DirectLabel(text = "", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.saveScr, scale = 0.06, pos = (0,0,-0.3))
+        self.saveText = DirectLabel(text = "Type in a name for your world", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.saveScr, scale = 0.075, pos = (0,0,0.35))
+        self.saveText2 = DirectLabel(text = "", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.saveScr, scale = 0.06, pos = (0,0,-0.45))
         self.saveName = DirectEntry(text = "", scale= .15, command=self.save, initialText="My World", numLines = 1, focus=1, frameTexture = inputTexture, parent = self.saveScr, text_fg = (1,1,1,1),
-            pos = (-0.6, 0, -0.1), text_scale = 0.75)
+            pos = (-0.6, 0, 0.1), text_scale = 0.75)
         self.saveGameBtn = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
-            relief = None, parent = self.saveScr, scale = 0.75, pos = (0, 0, -0.5), text = "Save", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.save)
+            relief = None, parent = self.saveScr, scale = 0.5, pos = (0, 0, -0.1), text = "Save", text_fg = (1,1,1,1), text_scale = 0.1, text_pos = (0, -0.04), command = self.save)
         self.backButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
-            relief = None, parent = self.saveScr, scale = 0.75, pos = (0, 0, -0.75), text = "Back", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.showPause)
+            relief = None, parent = self.saveScr, scale = 0.5, pos = (0, 0, -0.25), text = "Back", text_fg = (1,1,1,1), text_scale = 0.1, text_pos = (0, -0.04), command = self.showPause)
 
         # Load Screen
         numItemsVisible = 3
