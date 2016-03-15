@@ -44,7 +44,10 @@ base.setFrameRateMeter(True)
 paused = False
 
 inventory = [DIRT, COBBLESTONE, GLASS, GRASS, BRICKS, WOOD, LEAVES, PLANKS, STONE]
-currentBlock = DIRT
+currentBlock = inventory[0]
+
+currentSelectedText = DirectLabel(text = "Current block:", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = aspect2d, scale = 0.05, pos = (0,0,-0.9))
+currentBlockText = DirectLabel(text = blockNames[currentBlock], text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = aspect2d, scale = 0.05, pos = (0,0,-0.95))
 
 class Block:
 
@@ -343,6 +346,7 @@ def handlePick(right=False):
 def hotbarSelect(slot):
     global currentBlock
     currentBlock = inventory[slot-1]
+    currentBlockText["text"] = blockNames[currentBlock]
     if verboseLogging:
         print "Selected hotbar slot %d" % slot
         print "Current block: %s" % blockNames[currentBlock]
