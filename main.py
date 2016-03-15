@@ -22,9 +22,12 @@ world = {}
 AIR = 0
 DIRT = 1
 COBBLESTONE = 2
+GLASS = 3
+GRASS = 4
 
-blockNames = ['Air', 'Dirt', 'Cobblestone']
-multiTexBlocks = []
+blockNames = ['Air', 'Dirt', 'Cobblestone', 'Glass', 'Grass']
+multiTexBlocks = [GRASS]
+transparentBlocks = [GLASS]
 
 worldSize = 64/2
 
@@ -57,8 +60,17 @@ class Block:
         self.model.find('**/Top').setTag('topTag', '6')
         self.model.find('**/Bottom').setTag('botTag', '7')
 
+        if type in transparentBlocks:
+            self.model.setTransparency(1)
+
         if type in multiTexBlocks:
-            pass # TODO
+            topTexture = base.loader.loadTexture("gfx/tex/%s_top.png" % blockNames[type].lower())
+            sideTexture = base.loader.loadTexture("gfx/tex/%s_side.png" % blockNames[type].lower())
+            botTexture = base.loader.loadTexture("gfx/tex/%s_bot.png" % blockNames[type].lower())
+            textureStage = self.model.findTextureStage('*')
+            self.model.find('**/Top').setTexture(textureStage, topTexture, 1)
+            self.model.find('**/Side').setTexture(textureStage, sideTexture, 1)
+            self.model.find('**/Bottom').setTexture(textureStage, botTexture, 1)
         else:
             texture = base.loader.loadTexture("gfx/tex/%s.png" % blockNames[type].lower())
             textureStage = self.model.findTextureStage('*')
@@ -87,7 +99,7 @@ class PauseScreen:
         self.saveScr = aspect2d.attachNewNode("save")
 
         cm = CardMaker('card')
-        self.dim = render2d.attachNewNode(cm.generate()) # On render2d because I don't know a way to cover the entire screen on aspect2d
+        self.dim = render2d.attachNewNode(cm.generate())
         self.dim.setPos(-1, 0, -1)
         self.dim.setScale(2)
         self.dim.setTransparency(1)
@@ -324,32 +336,32 @@ def handleRightPickedObject(obj, west, north, east, south, top, bot):
     print "Right clicked a block at %d, %d, %d" % (obj.getX(), obj.getY(), obj.getZ())
     try:
         if world[(obj.getX()-1, obj.getY(), obj.getZ())].type == AIR and not west:
-            addBlock(COBBLESTONE, obj.getX()-1, obj.getY(), obj.getZ())
+            addBlock(GRASS, obj.getX()-1, obj.getY(), obj.getZ())
         elif world[(obj.getX()+1, obj.getY(), obj.getZ())].type == AIR and not east:
-            addBlock(COBBLESTONE, obj.getX()+1, obj.getY(), obj.getZ())
+            addBlock(GRASS, obj.getX()+1, obj.getY(), obj.getZ())
         elif world[(obj.getX(), obj.getY()-1, obj.getZ())].type == AIR and not south:
-            addBlock(COBBLESTONE, obj.getX(), obj.getY()-1, obj.getZ())
+            addBlock(GRASS, obj.getX(), obj.getY()-1, obj.getZ())
         elif world[(obj.getX(), obj.getY()+1, obj.getZ())].type == AIR and not north:
-            addBlock(COBBLESTONE, obj.getX(), obj.getY()+1, obj.getZ())
+            addBlock(GRASS, obj.getX(), obj.getY()+1, obj.getZ())
         elif world[(obj.getX(), obj.getY(), obj.getZ()+1)].type == AIR and not top:
-            addBlock(COBBLESTONE, obj.getX(), obj.getY(), obj.getZ()+1)
+            addBlock(GRASS, obj.getX(), obj.getY(), obj.getZ()+1)
         elif world[(obj.getX(), obj.getY(), obj.getZ()-1)].type == AIR and not bot:
-            addBlock(COBBLESTONE, obj.getX(), obj.getY(), obj.getZ()-1)
+            addBlock(GRASS, obj.getX(), obj.getY(), obj.getZ()-1)
     except KeyError:
         if wantLimitedWorld:
             print "Cannot place block -- end of the world"
         else:
             if not west:
-                addBlock(COBBLESTONE, obj.getX()-1, obj.getY(), obj.getZ())
+                addBlock(GRASS, obj.getX()-1, obj.getY(), obj.getZ())
             elif not east:
-                addBlock(COBBLESTONE, obj.getX()+1, obj.getY(), obj.getZ())
+                addBlock(GRASS, obj.getX()+1, obj.getY(), obj.getZ())
             elif not south:
-                addBlock(COBBLESTONE, obj.getX(), obj.getY()-1, obj.getZ())
+                addBlock(GRASS, obj.getX(), obj.getY()-1, obj.getZ())
             elif not north:
-                addBlock(COBBLESTONE, obj.getX(), obj.getY()+1, obj.getZ())
+                addBlock(GRASS, obj.getX(), obj.getY()+1, obj.getZ())
             elif not top:
-                addBlock(COBBLESTONE, obj.getX(), obj.getY(), obj.getZ()+1)
+                addBlock(GRASS, obj.getX(), obj.getY(), obj.getZ()+1)
             elif not bot:
-                addBlock(COBBLESTONE, obj.getX(), obj.getY(), obj.getZ()-1)
+                addBlock(GRASS, obj.getX(), obj.getY(), obj.getZ()-1)
 
 base.run()
