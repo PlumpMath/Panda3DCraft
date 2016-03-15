@@ -34,10 +34,7 @@ blockNames = ['Air', 'Dirt', 'Cobblestone', 'Glass', 'Grass', 'Bricks', 'Wood', 
 multiTexBlocks = [GRASS, WOOD]
 transparentBlocks = [GLASS, LEAVES]
 
-worldSize = 64/2
-
 verboseLogging = False
-wantLimitedWorld = False
 fancyRendering = False
 base.setFrameRateMeter(True)
 
@@ -233,6 +230,8 @@ class PauseScreen:
             print "Failed!"
             return
         for key in world:
+            if world[key].type == AIR:
+                continue
             f.write(str(key) + ':')
             f.write(str(world[key].type) + '\n')
         f.close()
@@ -275,13 +274,6 @@ def addBlock(blockType,x,y,z):
     block = Block(blockType, x, y, z)
     world[(x,y,z)] = block
     return
-
-if wantLimitedWorld:
-    for x in xrange(-worldSize, worldSize):
-        for y in xrange(-worldSize, worldSize):
-            for z in xrange(-worldSize, worldSize):
-                world[(x,y,z)] = Block(AIR, x, y, z)
-
 
 for x in xrange(0, 16):
     for y in xrange(0, 16):
@@ -386,21 +378,18 @@ def handleRightPickedObject(obj, west, north, east, south, top, bot):
         elif world[(obj.getX(), obj.getY(), obj.getZ()-1)].type == AIR and not bot:
             addBlock(currentBlock, obj.getX(), obj.getY(), obj.getZ()-1)
     except KeyError:
-        if wantLimitedWorld:
-            print "Cannot place block -- end of the world"
-        else:
-            if not west:
-                addBlock(currentBlock, obj.getX()-1, obj.getY(), obj.getZ())
-            elif not east:
-                addBlock(currentBlock, obj.getX()+1, obj.getY(), obj.getZ())
-            elif not south:
-                addBlock(currentBlock, obj.getX(), obj.getY()-1, obj.getZ())
-            elif not north:
-                addBlock(currentBlock, obj.getX(), obj.getY()+1, obj.getZ())
-            elif not top:
-                addBlock(currentBlock, obj.getX(), obj.getY(), obj.getZ()+1)
-            elif not bot:
-                addBlock(currentBlock, obj.getX(), obj.getY(), obj.getZ()-1)
+        if not west:
+            addBlock(currentBlock, obj.getX()-1, obj.getY(), obj.getZ())
+        elif not east:
+            addBlock(currentBlock, obj.getX()+1, obj.getY(), obj.getZ())
+        elif not south:
+            addBlock(currentBlock, obj.getX(), obj.getY()-1, obj.getZ())
+        elif not north:
+            addBlock(currentBlock, obj.getX(), obj.getY()+1, obj.getZ())
+        elif not top:
+            addBlock(currentBlock, obj.getX(), obj.getY(), obj.getZ()+1)
+        elif not bot:
+            addBlock(currentBlock, obj.getX(), obj.getY(), obj.getZ()-1)
 
 base.run()
 
