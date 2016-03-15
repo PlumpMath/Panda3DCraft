@@ -119,13 +119,13 @@ class PauseScreen:
 
         # Pause Screen
         self.unpauseButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
-            relief = None, parent = self.pauseScr, scale = 0.75, pos = (0, 0, 0.75), text = "Resume Game", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = pause)
+            relief = None, parent = self.pauseScr, scale = 0.50, pos = (0, 0, 0.30), text = "Resume Game", text_fg = (1,1,1,1), text_scale = 0.10, text_pos = (0, -0.04), command = pause)
         self.saveButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
-            relief = None, parent = self.pauseScr, scale = 0.75, pos = (0, 0, 0.5), text = "Save Game", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.showSave)
+            relief = None, parent = self.pauseScr, scale = 0.50, pos = (0, 0, 0.15), text = "Save Game", text_fg = (1,1,1,1), text_scale = 0.10, text_pos = (0, -0.04), command = self.showSave)
         self.loadButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
-            relief = None, parent = self.pauseScr, scale = 0.75, pos = (0, 0, -0.5), text = "Load Game", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = self.showLoad)
+            relief = None, parent = self.pauseScr, scale = 0.50, pos = (0, 0, -0.15), text = "Load Game", text_fg = (1,1,1,1), text_scale = 0.10, text_pos = (0, -0.04), command = self.showLoad)
         self.exitButton = DirectButton(geom = (self.buttonModel.find('**/button_up'), self.buttonModel.find('**/button_press'), self.buttonModel.find('**/button_over'), self.buttonModel.find('**/button_disabled')),
-            relief = None, parent = self.pauseScr, scale = 0.75, pos = (0, 0, -0.75), text = "Quit Game", text_fg = (1,1,1,1), text_scale = 0.15, text_pos = (0, -0.04), command = exit)
+            relief = None, parent = self.pauseScr, scale = 0.50, pos = (0, 0, -0.30), text = "Quit Game", text_fg = (1,1,1,1), text_scale = 0.10, text_pos = (0, -0.04), command = exit)
 
         # Save Screen
         self.saveText = DirectLabel(text = "Type in a name for your world", text_fg = (1,1,1,1), frameColor = (0,0,0,0), parent = self.saveScr, scale = 0.1, pos = (0,0,0.1))
