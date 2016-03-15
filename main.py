@@ -24,10 +24,15 @@ DIRT = 1
 COBBLESTONE = 2
 GLASS = 3
 GRASS = 4
+BRICKS = 5
+WOOD = 6
+LEAVES = 7
+PLANKS = 8
+STONE = 9
 
-blockNames = ['Air', 'Dirt', 'Cobblestone', 'Glass', 'Grass']
-multiTexBlocks = [GRASS]
-transparentBlocks = [GLASS]
+blockNames = ['Air', 'Dirt', 'Cobblestone', 'Glass', 'Grass', 'Bricks', 'Wood', 'Leaves', 'Planks', 'Stone']
+multiTexBlocks = [GRASS, WOOD]
+transparentBlocks = [GLASS, LEAVES]
 
 worldSize = 64/2
 
@@ -38,7 +43,7 @@ base.setFrameRateMeter(True)
 
 paused = False
 
-inventory = [DIRT, COBBLESTONE, GLASS, GRASS, AIR, AIR, AIR, AIR, AIR]
+inventory = [DIRT, COBBLESTONE, GLASS, GRASS, BRICKS, WOOD, LEAVES, PLANKS, STONE]
 currentBlock = DIRT
 
 class Block:
