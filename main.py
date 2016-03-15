@@ -34,6 +34,7 @@ worldSize = 64/2
 verboseGeneration = True
 paused = False
 wantLimitedWorld = False
+fancyRendering = False
 
 base.setFrameRateMeter(True)
 
@@ -287,10 +288,11 @@ slnp.setPos(8, -9, 128)
 slnp.setHpr(0,270,0)
 render.setLight(slnp)
 
-# Use a 512x512 resolution shadow map
-slight.setShadowCaster(True, 512, 512)
-# Enable the shader generator for the receiving nodes
-render.setShaderAuto()
+if fancyRendering:
+    # Use a 512x512 resolution shadow map
+    slight.setShadowCaster(True, 512, 512)
+    # Enable the shader generator for the receiving nodes
+    render.setShaderAuto()
 
 traverser = CollisionTraverser()
 handler = CollisionHandlerQueue()
