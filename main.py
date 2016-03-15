@@ -31,12 +31,15 @@ transparentBlocks = [GLASS]
 
 worldSize = 64/2
 
-verboseGeneration = True
-paused = False
+verboseLogging = False
 wantLimitedWorld = False
 fancyRendering = False
-
 base.setFrameRateMeter(True)
+
+paused = False
+
+inventory = [DIRT, COBBLESTONE, GLASS, GRASS, AIR, AIR, AIR, AIR, AIR]
+currentBlock = DIRT
 
 class Block:
 
@@ -234,6 +237,12 @@ class PauseScreen:
         f = open('saves/%s' % worldName, 'r')
         toLoad = f.read().split('\n')
         toLoad.pop() # get rid of newline
+
+        for key in world:
+            addBlock(AIR, key[0], key[1], key[2])
+
+        world.clear()
+
         for key in toLoad:
             key = key.split(':')
             posTup = eval(key[0])
@@ -272,8 +281,8 @@ for x in xrange(0, 16):
         blockType = DIRT
         z = int(snoise2(x / freq, y / freq, octaves) * amplitude)
         addBlock(blockType,x,y,z)
-        if verboseGeneration:
-            print "Generated block %d at (%d, %d, %d)" % (blockType, x, y, z)
+        if verboseLogging:
+            print "Generated %s at (%d, %d, %d)" % (blockNames[blockType], x, y, z)
 
 alight = AmbientLight('alight')
 alight.setColor(VBase4(0.6, 0.6, 0.6, 1))
@@ -326,44 +335,63 @@ def handlePick(right=False):
                 else:
                     handlePickedObject(pickedObj)
 
+def hotbarSelect(slot):
+    global currentBlock
+    currentBlock = inventory[slot-1]
+    if verboseLogging:
+        print "Selected hotbar slot %d" % slot
+        print "Current block: %s" % blockNames[currentBlock]
+
 base.accept('mouse1', handlePick)
 base.accept('mouse3', handlePick, extraArgs=[True])
 base.accept('escape', pause)
+base.accept('1', hotbarSelect, extraArgs=[1])
+base.accept('2', hotbarSelect, extraArgs=[2])
+base.accept('3', hotbarSelect, extraArgs=[3])
+base.accept('4', hotbarSelect, extraArgs=[4])
+base.accept('5', hotbarSelect, extraArgs=[5])
+base.accept('6', hotbarSelect, extraArgs=[6])
+base.accept('7', hotbarSelect, extraArgs=[7])
+base.accept('8', hotbarSelect, extraArgs=[8])
+base.accept('9', hotbarSelect, extraArgs=[9])
 
 def handlePickedObject(obj):
-    print "Left clicked a block at %d, %d, %d" % (obj.getX(), obj.getY(), obj.getZ())
+    if verboseLogging:
+        print "Left clicked a block at %d, %d, %d" % (obj.getX(), obj.getY(), obj.getZ())
     addBlock(AIR, obj.getX(), obj.getY(), obj.getZ())
 
 def handleRightPickedObject(obj, west, north, east, south, top, bot):
-    print "Right clicked a block at %d, %d, %d" % (obj.getX(), obj.getY(), obj.getZ())
+    if verboseLogging:
+        print "Right clicked a block at %d, %d, %d, attempting to place %s" % (obj.getX(), obj.getY(), obj.getZ(), blockNames[currentBlock])
     try:
         if world[(obj.getX()-1, obj.getY(), obj.getZ())].type == AIR and not west:
-            addBlock(GRASS, obj.getX()-1, obj.getY(), obj.getZ())
+            addBlock(currentBlock, obj.getX()-1, obj.getY(), obj.getZ())
         elif world[(obj.getX()+1, obj.getY(), obj.getZ())].type == AIR and not east:
-            addBlock(GRASS, obj.getX()+1, obj.getY(), obj.getZ())
+            addBlock(currentBlock, obj.getX()+1, obj.getY(), obj.getZ())
         elif world[(obj.getX(), obj.getY()-1, obj.getZ())].type == AIR and not south:
-            addBlock(GRASS, obj.getX(), obj.getY()-1, obj.getZ())
+            addBlock(currentBlock, obj.getX(), obj.getY()-1, obj.getZ())
         elif world[(obj.getX(), obj.getY()+1, obj.getZ())].type == AIR and not north:
-            addBlock(GRASS, obj.getX(), obj.getY()+1, obj.getZ())
+            addBlock(currentBlock, obj.getX(), obj.getY()+1, obj.getZ())
         elif world[(obj.getX(), obj.getY(), obj.getZ()+1)].type == AIR and not top:
-            addBlock(GRASS, obj.getX(), obj.getY(), obj.getZ()+1)
+            addBlock(currentBlock, obj.getX(), obj.getY(), obj.getZ()+1)
         elif world[(obj.getX(), obj.getY(), obj.getZ()-1)].type == AIR and not bot:
-            addBlock(GRASS, obj.getX(), obj.getY(), obj.getZ()-1)
+            addBlock(currentBlock, obj.getX(), obj.getY(), obj.getZ()-1)
     except KeyError:
         if wantLimitedWorld:
             print "Cannot place block -- end of the world"
         else:
             if not west:
-                addBlock(GRASS, obj.getX()-1, obj.getY(), obj.getZ())
+                addBlock(currentBlock, obj.getX()-1, obj.getY(), obj.getZ())
             elif not east:
-                addBlock(GRASS, obj.getX()+1, obj.getY(), obj.getZ())
+                addBlock(currentBlock, obj.getX()+1, obj.getY(), obj.getZ())
             elif not south:
-                addBlock(GRASS, obj.getX(), obj.getY()-1, obj.getZ())
+                addBlock(currentBlock, obj.getX(), obj.getY()-1, obj.getZ())
             elif not north:
-                addBlock(GRASS, obj.getX(), obj.getY()+1, obj.getZ())
+                addBlock(currentBlock, obj.getX(), obj.getY()+1, obj.getZ())
             elif not top:
-                addBlock(GRASS, obj.getX(), obj.getY(), obj.getZ()+1)
+                addBlock(currentBlock, obj.getX(), obj.getY(), obj.getZ()+1)
             elif not bot:
-                addBlock(GRASS, obj.getX(), obj.getY(), obj.getZ()-1)
+                addBlock(currentBlock, obj.getX(), obj.getY(), obj.getZ()-1)
 
 base.run()
+
