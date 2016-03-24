@@ -12,10 +12,10 @@ if __debug__:
 
 base = ShowBase()
 
-points = 256
-span = 5.0
-octaves = 1
-freq = 16.0 * octaves
+octavesElev = 5
+octavesRough = 2
+octavesDetail = 1
+freq = 16.0 * octavesElev
 
 world = {}
 
@@ -36,6 +36,8 @@ transparentBlocks = [GLASS, LEAVES]
 
 verboseLogging = False
 fancyRendering = False
+wantNewGeneration = False
+fillWorld = False
 base.setFrameRateMeter(True)
 
 paused = False
@@ -279,8 +281,15 @@ for x in xrange(0, 16):
     for y in xrange(0, 16):
         amplitude = random.randrange(0.0,5.0)
         blockType = DIRT
-        z = int(snoise2(x / freq, y / freq, octaves) * amplitude)
-        addBlock(blockType,x,y,z)
+        if wantNewGeneration:
+            z = max(min(int(snoise2(x / freq, y / freq, octavesElev)+(snoise2(x / freq, y / freq, octavesRough)*snoise2(x / freq, y / freq, octavesDetail))*64+64), 128), 0)
+            addBlock(blockType,x,y,z)
+        else:
+            z = max((int(snoise2(x / freq, y / freq, 5) * amplitude)+8), 0)
+            addBlock(blockType,x,y,z)
+        if fillWorld:
+            for height in xrange(0, z+1):
+                addBlock(blockType,x,y,height)
         if verboseLogging:
             print "Generated %s at (%d, %d, %d)" % (blockNames[blockType], x, y, z)
 
@@ -365,6 +374,7 @@ def handleRightPickedObject(obj, west, north, east, south, top, bot):
     if verboseLogging:
         print "Right clicked a block at %d, %d, %d, attempting to place %s" % (obj.getX(), obj.getY(), obj.getZ(), blockNames[currentBlock])
     try:
+        # not [block face] checks to see if the user clicked on [block face]. this is not confusing at all.
         if world[(obj.getX()-1, obj.getY(), obj.getZ())].type == AIR and not west:
             addBlock(currentBlock, obj.getX()-1, obj.getY(), obj.getZ())
         elif world[(obj.getX()+1, obj.getY(), obj.getZ())].type == AIR and not east:
