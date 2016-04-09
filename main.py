@@ -344,5 +344,10 @@ def handleRightPickedObject(obj, west, north, east, south, top, bot):
         elif not bot:
             addBlock(currentBlock, obj.getX(), obj.getY(), obj.getZ()-1)
 
-base.run()
+fog = Fog("fog")
+fog.setColor(0.5294, 0.8078, 0.9215)
+fog.setExpDensity(0.015)
+render.setFog(fog)
+base.camLens.setFar(256)
 
+base.run()
